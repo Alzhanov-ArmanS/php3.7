@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отзыв о товаре</title>
+</head>
+<body>
+
+<h1>Оставьте отзыв о товаре</h1>
+<form method="POST" action="">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="review">Ваш отзыв:</label>
+    <textarea id="review" name="review" required></textarea>
+
+    <label for="rating">Рейтинг:</label>
+    <select id="rating" name="rating" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+
+    <button type="submit">Отправить</button>
+</form>
+
+<?php
+// Обработка отзыва
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = htmlspecialchars($_POST['name']);
+    $review = htmlspecialchars($_POST['review']);
+    $rating = (int)$_POST['rating'];
+
+    echo "<h2>Ваш отзыв:</h2>";
+    echo "<p>Имя: $name</p>";
+    echo "<p>Отзыв: $review</p>";
+    echo "<p>Рейтинг: $rating</p>";
+}
+?>
+
+<h1>Отмена заказа</h1>
+<form method="POST" action="">
+    <label for="order_id">Номер заказа:</label>
+    <input type="text" id="order_id" name="order_id" required>
+
+    <label for="cancellation_reason">Причина отмены:</label>
+    <textarea id="cancellation_reason" name="reason" required></textarea>
+
+    <button type="submit">Отменить заказ</button>
+</form>
+
+<?php
+// Обработка отмены заказа
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_id']) && isset($_POST['reason'])) {
+    $order_id = htmlspecialchars($_POST['order_id']);
+    $reason = htmlspecialchars($_POST['reason']);
+
+    echo "<h2>Отмена заказа:</h2>";
+    echo "<p>Номер заказа: $order_id</p>";
+    echo "<p>Причина отмены: $reason</p>";
+}
+?>
+
+<h1>Отзывы</h1>
+
+<?php
+// Массив для хранения фиктивных отзывов
+$reviews = [];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['review'])) {
+    $reviews[] = [
+        'name' => htmlspecialchars($_POST['name']),
+        'review' => htmlspecialchars($_POST['review']),
+        'rating' => (int)$_POST['rating']
+    ];
+}
+
+// Вывод всех отзывов
+if (!empty($reviews)) {
+    echo "<h2>Список отзывов:</h2>";
+    foreach ($reviews as $r) {
+        echo "<p><strong>Имя:</strong> {$r['name']}</p>";
+        echo "<p><strong>Отзыв:</strong> {$r['review']}</p>";
+        echo "<p><strong>Рейтинг:</strong> {$r['rating']}</p><hr>";
+    }
+}
+?>
+
+</body>
+</html>
